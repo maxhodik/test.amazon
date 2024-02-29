@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ReportOptionsDTO {
-    private String Granularity;
+    private String granularity;
 
 }

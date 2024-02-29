@@ -1,7 +1,7 @@
 package com.example.maxhodik.test.amazon.test.amazon.controller;
 
-import com.example.maxhodik.test.amazon.test.amazon.dto.ReportDataDateDTO;
 import com.example.maxhodik.test.amazon.test.amazon.dto.ReportDataAsinDTO;
+import com.example.maxhodik.test.amazon.test.amazon.dto.ReportDataDateDTO;
 import com.example.maxhodik.test.amazon.test.amazon.dto.SearchDateDTO;
 import com.example.maxhodik.test.amazon.test.amazon.dto.SearchDateRangeDTO;
 import com.example.maxhodik.test.amazon.test.amazon.model.ReportData;
@@ -49,6 +49,8 @@ public class StatisticController {
         }
         List<SalesAndTrafficByDate> byDateIn = dataService.findByDateBetween(dateDTO.getStartDate(), dateDTO.getEndDate());
         reportData.setSalesAndTrafficByDate(byDateIn);
+
+//        reportData.getReportSpecification()
 
         log.info("Search by dates {} - {}", dateDTO.getStartDate(), dateDTO.getEndDate());
         return ResponseEntity.ok(reportData);
