@@ -48,9 +48,7 @@ public class StatisticController {
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
         List<SalesAndTrafficByDate> byDateIn = dataService.findByDateBetween(dateDTO.getStartDate(), dateDTO.getEndDate());
-//        reportData.setSalesAndTrafficByDate(byDateIn);
 
-//        reportData.getReportSpecification()
 
         log.info("Search by dates {} - {}", dateDTO.getStartDate(), dateDTO.getEndDate());
         return ResponseEntity.ok(byDateIn);
@@ -66,7 +64,7 @@ public class StatisticController {
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
         List<SalesAndTrafficByDate> byDateIn = dataService.findByDate(dateDTO.getDate());
-//        reportData.setSalesAndTrafficByDate(byDateIn);
+
 
         log.info("Search by date {}", dateDTO.getDate());
         return ResponseEntity.ok(byDateIn);
@@ -107,7 +105,7 @@ public class StatisticController {
         ReportDataAsinDTO reportData = new ReportDataAsinDTO();
 
         List<SalesAndTrafficByAsin> byAsinIn = asinService.findByAsins(asins);
-//        reportData.setSalesAndTrafficByAsin(byAsinIn);
+
         log.info("Search by asins {}", asins);
         return ResponseEntity.ok(byAsinIn);
     }
@@ -117,7 +115,7 @@ public class StatisticController {
         ReportDataAsinDTO reportData = new ReportDataAsinDTO();
 
         List<SalesAndTrafficByAsin> byAsin = asinService.findAllByAsins();
-//        reportData.setSalesAndTrafficByAsin(byAsin);
+
         log.info("Search all by asins");
         return ResponseEntity.ok(byAsin);
     }
