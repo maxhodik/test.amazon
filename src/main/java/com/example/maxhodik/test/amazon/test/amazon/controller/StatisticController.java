@@ -48,12 +48,12 @@ public class StatisticController {
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
         List<SalesAndTrafficByDate> byDateIn = dataService.findByDateBetween(dateDTO.getStartDate(), dateDTO.getEndDate());
-        reportData.setSalesAndTrafficByDate(byDateIn);
+//        reportData.setSalesAndTrafficByDate(byDateIn);
 
 //        reportData.getReportSpecification()
 
         log.info("Search by dates {} - {}", dateDTO.getStartDate(), dateDTO.getEndDate());
-        return ResponseEntity.ok(reportData);
+        return ResponseEntity.ok(byDateIn);
     }
     //  Вивід статистики по одній даті
     @GetMapping("/by_date")
@@ -66,20 +66,20 @@ public class StatisticController {
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
         List<SalesAndTrafficByDate> byDateIn = dataService.findByDate(dateDTO.getDate());
-        reportData.setSalesAndTrafficByDate(byDateIn);
+//        reportData.setSalesAndTrafficByDate(byDateIn);
 
         log.info("Search by date {}", dateDTO.getDate());
-        return ResponseEntity.ok(reportData);
+        return ResponseEntity.ok(byDateIn);
     }
     @GetMapping("/all_date")
     public ResponseEntity<?> findByDate() {
         ReportDataDateDTO reportData = new ReportDataDateDTO();
 
-        List<SalesAndTrafficByDate> byDateIn = dataService.findAll();
-        reportData.setSalesAndTrafficByDate(byDateIn);
+        List<SalesAndTrafficByDate> byDate = dataService.findAll();
+//        reportData.setSalesAndTrafficByDate(byDateIn);
 
         log.info("Search all by date ");
-        return ResponseEntity.ok(reportData);
+        return ResponseEntity.ok(byDate);
     }
 
 
@@ -103,22 +103,22 @@ public class StatisticController {
 
 
     @GetMapping("/by_asin")
-    public ResponseEntity<ReportDataAsinDTO> findByAsin(@RequestBody List<String> asins) {
+    public ResponseEntity<?> findByAsin(@RequestBody List<String> asins) {
         ReportDataAsinDTO reportData = new ReportDataAsinDTO();
 
         List<SalesAndTrafficByAsin> byAsinIn = asinService.findByAsins(asins);
-        reportData.setSalesAndTrafficByAsin(byAsinIn);
+//        reportData.setSalesAndTrafficByAsin(byAsinIn);
         log.info("Search by asins {}", asins);
-        return ResponseEntity.ok(reportData);
+        return ResponseEntity.ok(byAsinIn);
     }
 
     @GetMapping("/all_asin")
-    public ResponseEntity<ReportDataAsinDTO> findAllByAsin() {
+    public ResponseEntity<?> findAllByAsin() {
         ReportDataAsinDTO reportData = new ReportDataAsinDTO();
 
         List<SalesAndTrafficByAsin> byAsin = asinService.findAllByAsins();
-        reportData.setSalesAndTrafficByAsin(byAsin);
+//        reportData.setSalesAndTrafficByAsin(byAsin);
         log.info("Search all by asins");
-        return ResponseEntity.ok(reportData);
+        return ResponseEntity.ok(byAsin);
     }
 }
