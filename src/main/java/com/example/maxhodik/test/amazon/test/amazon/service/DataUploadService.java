@@ -44,15 +44,19 @@ public class DataUploadService {
     private ObjectMapper objectMapper;
 
     @Scheduled(fixedDelay = 500000, initialDelay = 3000)
-    public void uploadFile() throws IOException {
-        // todo catch IOException
+    public void uploadFile() {
+
         log.info("Attempt to update DB");
         ClassPathResource resource = new ClassPathResource(STATIC_TEST_REPORT_JSON);
         String reportDataForCompare;
-        reportDataForCompare = getStringDataFromFile(resource);
-
-        ReportData reportData = objectMapper.readValue(reportDataForCompare, ReportData.class);
-
+        ReportData reportData;
+        try {
+            reportDataForCompare = getStringDataFromFile(resource);
+            reportData = objectMapper.readValue(reportDataForCompare, ReportData.class);
+        } catch (IOException e) {
+            log.error("Can't read JSON from {}", STATIC_TEST_REPORT_JSON);
+            throw new RuntimeException(e);
+        }
         if (reportData == null) {
             log.error("test_report.json is empty");
             return;
