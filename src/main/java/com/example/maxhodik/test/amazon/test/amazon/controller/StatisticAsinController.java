@@ -18,8 +18,12 @@ public class StatisticAsinController {
 
     private final AsinService asinService;
 
+    /***
+     * Statistic by ASINs
+     * @param asins - List of ASINs
+     * @return list of found SalesAndTrafficByAsin
+     */
 
-    // Вивід статистики по вказаному ASIN (або списку ASINs)
     @PostMapping("/search")
     public ResponseEntity<?> findByAsin(@RequestBody List<String> asins) {
         if (asins == null || CollectionUtils.isEmpty(asins)) {
@@ -30,7 +34,11 @@ public class StatisticAsinController {
         return ResponseEntity.ok(byAsinIn);
     }
 
-    //   Вивід сумарної статистики по всім ASIN
+    /***
+     * Statistic by ASINs
+     * @return list of found SalesAndTrafficByAsin
+     */
+
     @GetMapping
     public ResponseEntity<?> findAllByAsin() {
         List<SalesAndTrafficByAsinDTO> byAsin = asinService.findAllByAsins();

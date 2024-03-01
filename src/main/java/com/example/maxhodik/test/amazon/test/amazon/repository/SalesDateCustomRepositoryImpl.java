@@ -15,8 +15,6 @@ public class SalesDateCustomRepositoryImpl implements SalesDateCustomRepository 
     private final MongoTemplate mongoTemplate;
 
     @Override
-
-
     public List<SalesAndTrafficByDate> findByDateBetweenInclusive(String startDate, String endDate) {
         Criteria criteria = Criteria.where("date").gte(startDate).andOperator(Criteria.where("date").lte(endDate));
         Query query = new Query(criteria);

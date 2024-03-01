@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 @Service
@@ -23,21 +24,21 @@ public class AsinServiceImpl implements AsinService {
     @Override
     @Cacheable("findByAsins")
     public List<SalesAndTrafficByAsinDTO> findByAsins(List<String> asins) {
-        log.info("Finding by asins{}", asins);
+        log.info("Search in db by asins{}", asins);
         return getSalesAndTrafficByAsinDTOS(asinRepository.findByParentAsinIn(asins));
-
     }
 
     @Override
     @Cacheable("findAllByAsins")
     public List<SalesAndTrafficByAsinDTO> findAllByAsins() {
-        log.info("finding all by asin");
+        log.info("Find all by asin");
         return getSalesAndTrafficByAsinDTOS(asinRepository.findAll());
     }
 
     private List<SalesAndTrafficByAsinDTO> getSalesAndTrafficByAsinDTOS(List<SalesAndTrafficByAsin> asinRepository) {
         return asinRepository
                 .stream()
+                .filter(Objects::nonNull)
                 .map(mapper::mapToSalesDTO)
                 .toList();
     }

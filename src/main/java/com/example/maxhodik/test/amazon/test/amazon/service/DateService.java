@@ -4,9 +4,7 @@ import com.example.maxhodik.test.amazon.test.amazon.dto.SalesAndTrafficByDateDTO
 
 import java.util.List;
 
-public interface DataService {
-
-
+public interface DateService {
     List<SalesAndTrafficByDateDTO> findByDateBetween(String startDate, String endDate);
 
     List<SalesAndTrafficByDateDTO> findByDate(String date);

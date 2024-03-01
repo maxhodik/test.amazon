@@ -3,8 +3,7 @@ package com.example.maxhodik.test.amazon.test.amazon.controller;
 import com.example.maxhodik.test.amazon.test.amazon.dto.SalesAndTrafficByDateDTO;
 import com.example.maxhodik.test.amazon.test.amazon.dto.SearchDateDTO;
 import com.example.maxhodik.test.amazon.test.amazon.dto.SearchDateRangeDTO;
-import com.example.maxhodik.test.amazon.test.amazon.repository.ReportDataRepository;
-import com.example.maxhodik.test.amazon.test.amazon.service.DataService;
+import com.example.maxhodik.test.amazon.test.amazon.service.DateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,44 +19,40 @@ import java.util.List;
 @RequestMapping("/statistic/dates")
 
 public class StatisticDateController {
+    private final DateService dateService;
 
-    private final ReportDataRepository reportDataRepository;
-
-    private final DataService dataService;
-
-
-    //  Вивід статистики по  проміжку дат
     @PostMapping("/searchByRange")
     public ResponseEntity<?> findByDateRange(@RequestBody @Valid SearchDateRangeDTO dateDTO, BindingResult result) {
         if (result.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder("Validation error(s): ");
-            result.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("; "));
-            log.error(errorMessage.toString());
-            return ResponseEntity.badRequest().body(errorMessage.toString());
+            return getStringResponseEntity(result);
         }
-        List<SalesAndTrafficByDateDTO> byDateIn = dataService.findByDateBetween(dateDTO.getStartDate(), dateDTO.getEndDate());
+        List<SalesAndTrafficByDateDTO> byDateIn = dateService.findByDateBetween(dateDTO.getStartDate(), dateDTO.getEndDate());
         log.info("Search by dates {} - {}", dateDTO.getStartDate(), dateDTO.getEndDate());
         return ResponseEntity.ok(byDateIn);
     }
 
-    //  Вивід статистики по одній даті
+    private static ResponseEntity<String> getStringResponseEntity(BindingResult result) {
+        StringBuilder errorMessage = new StringBuilder("Validation error(s): ");
+        result.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("; "));
+        log.error(errorMessage.toString());
+        return ResponseEntity.badRequest().body(errorMessage.toString());
+    }
+
+
     @PostMapping("/searchByDate")
     public ResponseEntity<?> findByDate(@RequestBody @Valid SearchDateDTO dateDTO, BindingResult result) {
         if (result.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder("Validation error(s): ");
-            result.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("; "));
-            log.error(errorMessage.toString());
-            return ResponseEntity.badRequest().body(errorMessage.toString());
+            return getStringResponseEntity(result);
         }
-        List<SalesAndTrafficByDateDTO> byDateIn = dataService.findByDate(dateDTO.getDate());
+        List<SalesAndTrafficByDateDTO> byDateIn = dateService.findByDate(dateDTO.getDate());
         log.info("Search by date {}", dateDTO.getDate());
         return ResponseEntity.ok(byDateIn);
     }
 
-    // Вивід сумарної статистики по всім датам
+
     @GetMapping
     public ResponseEntity<?> findAllByDate() {
-        List<SalesAndTrafficByDateDTO> byDate = dataService.findAllByDate();
+        List<SalesAndTrafficByDateDTO> byDate = dateService.findAllByDate();
         log.info("Search all by date ");
         return ResponseEntity.ok(byDate);
     }

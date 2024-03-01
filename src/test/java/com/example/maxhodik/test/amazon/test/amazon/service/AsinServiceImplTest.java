@@ -20,12 +20,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AsinServiceImplTest {
 
-    private final String salesByAsin =
-            TestUtils.readResource("sale.and.traffic.by.asin.json");
+    private final String salesByAsin = TestUtils.readResource("sale.and.traffic.by.asin.json");
     Gson gson = new Gson();
     private final SalesAndTrafficByAsin salesAndTrafficByAsin = gson.fromJson(salesByAsin, SalesAndTrafficByAsin.class);
-    private final String salesByAsinDTO =
-            TestUtils.readResource("sale.and.traffic.by.asin.json");
+
+    // todo delete
+    private final String salesByAsinDTO = TestUtils.readResource("sale.and.traffic.by.asin.json");
     private final SalesAndTrafficByAsinDTO salesAndTrafficByAsinDTO = gson.fromJson(salesByAsin, SalesAndTrafficByAsinDTO.class);
     private final List<SalesAndTrafficByAsin> salesAndTrafficByAsinList = List.of(salesAndTrafficByAsin);
     private final List<SalesAndTrafficByAsinDTO> salesDTOList = List.of(salesAndTrafficByAsinDTO);
@@ -42,8 +42,8 @@ class AsinServiceImplTest {
     @Test
     void findByAsins() {
         // GIVEN
-        when(asinRepository.findByParentAsinIn(any())).thenReturn(salesAndTrafficByAsinList);
-        when(mapper.mapToSalesDTO(any())).thenReturn(salesAndTrafficByAsinDTO);
+        when(asinRepository.findByParentAsinIn(anyList())).thenReturn(salesAndTrafficByAsinList);
+        when(mapper.mapToSalesDTO(any(SalesAndTrafficByAsin.class))).thenReturn(salesAndTrafficByAsinDTO);
         // WHEN
         List<SalesAndTrafficByAsinDTO> actual = asinService.findByAsins(asinList);
         // THEN
@@ -55,13 +55,11 @@ class AsinServiceImplTest {
     void findAllByAsins() {
         // GIVEN
         when(asinRepository.findAll()).thenReturn(salesAndTrafficByAsinList);
-        when(mapper.mapToSalesDTO(any())).thenReturn(salesAndTrafficByAsinDTO);
+        when(mapper.mapToSalesDTO(any(SalesAndTrafficByAsin.class))).thenReturn(salesAndTrafficByAsinDTO);
         // WHEN
         List<SalesAndTrafficByAsinDTO> actual = asinService.findAllByAsins();
         // THEN
         verify(mapper).mapToSalesDTO(salesAndTrafficByAsin);
         Assertions.assertEquals(salesDTOList, actual);
     }
-
-
 }

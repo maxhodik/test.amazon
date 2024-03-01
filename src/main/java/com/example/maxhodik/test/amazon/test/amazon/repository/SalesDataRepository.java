@@ -8,8 +8,5 @@ import java.util.List;
 public interface SalesDataRepository extends MongoRepository<SalesAndTrafficByDate, String> {
 
     List<SalesAndTrafficByDate> findByDate(String date);
-
-    List<SalesAndTrafficByDate> findAll();
-
 }
 

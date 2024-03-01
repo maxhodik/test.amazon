@@ -1,0 +1,47 @@
+{
+  "parentAsin": "B07JWCZKSJ",
+  "salesByAsin": {
+    "unitsOrdered": 4,
+    "unitsOrderedB2B": 0,
+    "orderedProductSales": {
+      "amount": 54.9,
+      "currencyCode": "USD"
+    },
+    "orderedProductSalesB2B": {
+      "amount": 0,
+      "currencyCode": "USD"
+    },
+    "totalOrderItems": 4,
+    "totalOrderItemsB2B": 0
+  },
+  "trafficByAsin": {
+    "browserSessions": 18,
+    "browserSessionsB2B": 0,
+    "mobileAppSessions": 15,
+    "mobileAppSessionsB2B": 0,
+    "sessions": 33,
+    "sessionsB2B": 0,
+    "browserSessionPercentage": 0.12,
+    "browserSessionPercentageB2B": 0,
+    "mobileAppSessionPercentage": 0.06,
+    "mobileAppSessionPercentageB2B": 0,
+    "sessionPercentage": 0.08,
+    "sessionPercentageB2B": 0,
+    "browserPageViews": 29,
+    "browserPageViewsB2B": 0,
+    "mobileAppPageViews": 21,
+    "mobileAppPageViewsB2B": 0,
+    "pageViews": 50,
+    "pageViewsB2B": 0,
+    "browserPageViewsPercentage": 0.11,
+    "browserPageViewsPercentageB2B": 0,
+    "mobileAppPageViewsPercentage": 0.04,
+    "mobileAppPageViewsPercentageB2B": 0,
+    "pageViewsPercentage": 0.06,
+    "pageViewsPercentageB2B": 0,
+    "buyBoxPercentage": 100,
+    "buyBoxPercentageB2B": 0,
+    "unitSessionPercentage": 12.12,
+    "unitSessionPercentageB2B": 0
+  }
+}

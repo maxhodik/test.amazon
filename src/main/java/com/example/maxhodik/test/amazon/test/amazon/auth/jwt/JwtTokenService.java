@@ -31,7 +31,6 @@ public class JwtTokenService {
         if (authHeader != null && authHeader.contains(jwtConfig.getTokenPrefix())) {
             return authHeader.replace(jwtConfig.getTokenPrefix(), "").trim();
         }
-        //todo add log Inconsist authHeader
         return null;
     }
 

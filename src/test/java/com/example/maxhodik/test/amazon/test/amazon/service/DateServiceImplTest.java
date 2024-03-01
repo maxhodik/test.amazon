@@ -22,16 +22,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class DataServiceImplTest {
-    private final String salesByDate =
-            TestUtils.readResource("sale.and.traffic.by.asin.json");
-    Gson gson = new Gson();
+class DateServiceImplTest {
+    private static final String DATE = "2024-02-14";
+    private static final String END_DATE = "2024-02-16";
+    private final String salesByDate = TestUtils.readResource("sale.and.traffic.by.asin.json");
+    private Gson gson = new Gson();
     private final SalesAndTrafficByDate salesAndTrafficByDate = gson.fromJson(salesByDate, SalesAndTrafficByDate.class);
     private final SalesAndTrafficByDateDTO salesAndTrafficByDateDTO = gson.fromJson(salesByDate, SalesAndTrafficByDateDTO.class);
     private final List<SalesAndTrafficByDate> salesAndTrafficByDateList = List.of(salesAndTrafficByDate);
     private final List<SalesAndTrafficByDateDTO> salesAndTrafficByDateDTOList = List.of(salesAndTrafficByDateDTO);
-    private final String DATE = "2024-02-14";
-    private final String END_DATE = "2024-02-16";
     @Mock
     private SalesDataRepository dataRepository;
     @Mock
@@ -39,26 +38,25 @@ class DataServiceImplTest {
     @Mock
     private SalesAndTrafficByDateMapper mapper;
     @InjectMocks
-    DataServiceImpl dataService;
+    private DateServiceImpl dataService;
 
     @Test
     void findByDateBetween() {
         // GIVEN
         when(customRepository.findByDateBetweenInclusive(anyString(), anyString())).thenReturn(salesAndTrafficByDateList);
-        when(mapper.mapToSalesDTO(any())).thenReturn(salesAndTrafficByDateDTO);
+        when(mapper.mapToSalesDTO(any(SalesAndTrafficByDate.class))).thenReturn(salesAndTrafficByDateDTO);
         // WHEN
         List<SalesAndTrafficByDateDTO> actual = dataService.findByDateBetween(DATE, END_DATE);
         // THEN
         verify(mapper).mapToSalesDTO(salesAndTrafficByDate);
         Assertions.assertEquals(salesAndTrafficByDateDTOList, actual);
-
     }
 
     @Test
     void findByDate() {
         // GIVEN
         when(dataRepository.findByDate(anyString())).thenReturn(salesAndTrafficByDateList);
-        when(mapper.mapToSalesDTO(any())).thenReturn(salesAndTrafficByDateDTO);
+        when(mapper.mapToSalesDTO(any(SalesAndTrafficByDate.class))).thenReturn(salesAndTrafficByDateDTO);
         // WHEN
         List<SalesAndTrafficByDateDTO> actual = dataService.findByDate(DATE);
         // THEN
@@ -70,7 +68,7 @@ class DataServiceImplTest {
     void findAllByDate() {
         // GIVEN
         when(dataRepository.findAll()).thenReturn(salesAndTrafficByDateList);
-        when(mapper.mapToSalesDTO(any())).thenReturn(salesAndTrafficByDateDTO);
+        when(mapper.mapToSalesDTO(any(SalesAndTrafficByDate.class))).thenReturn(salesAndTrafficByDateDTO);
         // WHEN
         List<SalesAndTrafficByDateDTO> actual = dataService.findAllByDate();
         // THEN

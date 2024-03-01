@@ -70,7 +70,6 @@ public class JwtTokenProvider {
         if (authHeader != null && authHeader.contains(jwtConfig.getTokenPrefix())) {
             return authHeader.replace(jwtConfig.getTokenPrefix(), "");
         }
-        //todo add log Inconsist authHeader
         return null;
     }
 }

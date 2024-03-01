@@ -11,11 +11,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class DataServiceImpl implements DataService {
+public class DateServiceImpl implements DateService {
     private final SalesDataRepository dataRepository;
     private final SalesDateCustomRepository customRepository;
     private final SalesAndTrafficByDateMapper mapper;
@@ -24,7 +25,7 @@ public class DataServiceImpl implements DataService {
     @Override
     @Cacheable("findByDateBetween")
     public List<SalesAndTrafficByDateDTO> findByDateBetween(String startDate, String endDate) {
-        log.info("Finding by date between {} - {}", startDate, endDate);
+        log.info("Search by date between {} - {} in db ", startDate, endDate);
         return getSalesAndTrafficByDateDTOS(customRepository.findByDateBetweenInclusive(startDate, endDate));
 
     }
@@ -32,19 +33,20 @@ public class DataServiceImpl implements DataService {
     @Override
     @Cacheable("findByDate")
     public List<SalesAndTrafficByDateDTO> findByDate(String date) {
-        log.info("Finding by date {}", date);
+        log.info("Search by date {} in db ", date);
         return getSalesAndTrafficByDateDTOS(dataRepository.findByDate(date));
     }
 
     @Override
     @Cacheable("findAllByDate")
     public List<SalesAndTrafficByDateDTO> findAllByDate() {
-        log.info("Finding all by date ");
+        log.info("Find all by date");
         return getSalesAndTrafficByDateDTOS(dataRepository.findAll());
     }
 
     private List<SalesAndTrafficByDateDTO> getSalesAndTrafficByDateDTOS(List<SalesAndTrafficByDate> listByDate) {
         return listByDate.stream()
+                .filter(Objects::nonNull)
                 .map(mapper::mapToSalesDTO)
                 .toList();
     }

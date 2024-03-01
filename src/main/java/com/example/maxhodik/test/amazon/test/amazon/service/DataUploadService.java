@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @Component
 public class DataUploadService {
 
+    private String STATIC_TEST_REPORT_JSON = "static/test_report.json";
     @Autowired
     private SalesDataRepository salesDataRepository;
 
@@ -44,16 +45,14 @@ public class DataUploadService {
 
     @Scheduled(fixedDelay = 500000, initialDelay = 3000)
     public void uploadFile() throws IOException {
-
+        // todo catch IOException
         log.info("Attempt to update DB");
-        ClassPathResource resource = new ClassPathResource("static/test_report.json");
+        ClassPathResource resource = new ClassPathResource(STATIC_TEST_REPORT_JSON);
         String reportDataForCompare;
-        try (InputStream inputStream = resource.getInputStream()) {
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-                reportDataForCompare = bufferedReader.lines().collect(Collectors.joining("\n"));
-            }
-        }
-        ReportData reportData = objectMapper.readValue(resource.getInputStream(), ReportData.class);
+        reportDataForCompare = getStringDataFromFile(resource);
+
+        ReportData reportData = objectMapper.readValue(reportDataForCompare, ReportData.class);
+
         if (reportData == null) {
             log.error("test_report.json is empty");
             return;
@@ -61,7 +60,6 @@ public class DataUploadService {
 
         if (isUpdateNeeded(reportDataForCompare)) {
             cleanDB();
-            log.info("DB cleaned");
             compareRepository.save(new ReportDataForCompare(reportDataForCompare));
             ReportData savedReportData = saveReportData(reportData);
             saveSalesDate(savedReportData);
@@ -72,11 +70,22 @@ public class DataUploadService {
         }
     }
 
+    private String getStringDataFromFile(ClassPathResource resource) throws IOException {
+        String reportDataForCompare;
+        try (InputStream inputStream = resource.getInputStream()) {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+                reportDataForCompare = bufferedReader.lines().collect(Collectors.joining("\n"));
+            }
+        }
+        return reportDataForCompare;
+    }
+
     private void cleanDB() {
         compareRepository.deleteAll();
         reportDataRepository.deleteAll();
         salesDataRepository.deleteAll();
         salesAsinRepository.deleteAll();
+        log.info("DB cleaned");
     }
 
     private boolean isUpdateNeeded(String reportData) {
@@ -89,13 +98,13 @@ public class DataUploadService {
         return reportDataFromBd == null || !reportDataFromBd.equals(reportData);
     }
 
-    private void saveSalesDate(ReportData reportData) throws IOException {
+    private void saveSalesDate(ReportData reportData) {
         List<SalesAndTrafficByDate> salesAndTrafficByDateList = reportData.getSalesAndTrafficByDate();
         salesDataRepository.saveAll(salesAndTrafficByDateList);
         log.info("Sales by date uploaded");
     }
 
-    private void saveSalesAsin(ReportData reportData) throws IOException {
+    private void saveSalesAsin(ReportData reportData) {
         List<SalesAndTrafficByAsin> salesAndTrafficByAsinList =
                 reportData.getSalesAndTrafficByAsin();
         salesAsinRepository.saveAll(salesAndTrafficByAsinList);
