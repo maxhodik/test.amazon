@@ -25,7 +25,6 @@ public class DataServiceImpl implements DataService {
     @Cacheable("findByDateBetween")
     public List<SalesAndTrafficByDateDTO> findByDateBetween(String startDate, String endDate) {
         log.info("Finding by date between {} - {}", startDate, endDate);
-        customRepository.findByDateBetweenInclusive(startDate, endDate);
         return getSalesAndTrafficByDateDTOS(customRepository.findByDateBetweenInclusive(startDate, endDate));
 
     }
