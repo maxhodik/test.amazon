@@ -11,7 +11,7 @@ public interface DataService {
 
     List<SalesAndTrafficByDate> findByDate(String date);
 
-    List<SalesAndTrafficByDate> findAll();
+    List<SalesAndTrafficByDate> findAllByDate();
 }
 
 

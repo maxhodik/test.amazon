@@ -5,6 +5,7 @@ import com.example.maxhodik.test.amazon.test.amazon.repository.SalesDataReposito
 import com.example.maxhodik.test.amazon.test.amazon.repository.SalesDateCustomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +19,23 @@ public class DataServiceImpl implements DataService {
 
 
     @Override
+    @Cacheable("findByDateBetween")
     public List<SalesAndTrafficByDate> findByDateBetween(String startDate, String endDate) {
+        log.info("Finding by date between {} - {}", startDate, endDate);
         return customRepository.findByDateBetweenInclusive(startDate, endDate);
     }
 
     @Override
+    @Cacheable("findByDate")
     public List<SalesAndTrafficByDate> findByDate(String date) {
+        log.info("Finding by date {}", date);
         return dataRepository.findByDate(date);
     }
 
     @Override
-    public List<SalesAndTrafficByDate> findAll() {
+    @Cacheable("findAllByDate")
+    public List<SalesAndTrafficByDate> findAllByDate() {
+        log.info("Finding all by date ");
         return dataRepository.findAll();
     }
 }

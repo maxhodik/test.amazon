@@ -7,9 +7,7 @@ import com.example.maxhodik.test.amazon.test.amazon.dto.SearchDateRangeDTO;
 import com.example.maxhodik.test.amazon.test.amazon.model.ReportData;
 import com.example.maxhodik.test.amazon.test.amazon.model.SalesAndTrafficByAsin;
 import com.example.maxhodik.test.amazon.test.amazon.model.SalesAndTrafficByDate;
-import com.example.maxhodik.test.amazon.test.amazon.model.User;
 import com.example.maxhodik.test.amazon.test.amazon.repository.ReportDataRepository;
-import com.example.maxhodik.test.amazon.test.amazon.repository.UserRepository;
 import com.example.maxhodik.test.amazon.test.amazon.service.AsinService;
 import com.example.maxhodik.test.amazon.test.amazon.service.DataService;
 import jakarta.validation.Valid;
@@ -29,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/statistic")
 public class StatisticController {
-    private final UserRepository userRepository;
+
     private final ReportDataRepository reportDataRepository;
     private final AsinService asinService;
     private final DataService dataService;
@@ -73,8 +71,7 @@ public class StatisticController {
     public ResponseEntity<?> findByDate() {
         ReportDataDateDTO reportData = new ReportDataDateDTO();
 
-        List<SalesAndTrafficByDate> byDate = dataService.findAll();
-//        reportData.setSalesAndTrafficByDate(byDateIn);
+        List<SalesAndTrafficByDate> byDate = dataService.findAllByDate();
 
         log.info("Search all by date ");
         return ResponseEntity.ok(byDate);
@@ -87,17 +84,6 @@ public class StatisticController {
         return ResponseEntity.ok(all);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<User> saveUser(@RequestBody String name) {
-        log.info("Create User");
-        User user = User.builder()
-                .username(name)
-                .password("jfgjfg")
-                .build();
-        User insert = userRepository.save(user);
-        return ResponseEntity.ok(insert);
-
-    }
 
 
     @GetMapping("/by_asin")
