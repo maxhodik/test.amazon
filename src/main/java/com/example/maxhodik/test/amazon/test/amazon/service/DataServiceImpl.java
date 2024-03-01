@@ -1,5 +1,7 @@
 package com.example.maxhodik.test.amazon.test.amazon.service;
 
+import com.example.maxhodik.test.amazon.test.amazon.dto.SalesAndTrafficByDateDTO;
+import com.example.maxhodik.test.amazon.test.amazon.mapper.SalesAndTrafficByDateMapper;
 import com.example.maxhodik.test.amazon.test.amazon.model.SalesAndTrafficByDate;
 import com.example.maxhodik.test.amazon.test.amazon.repository.SalesDataRepository;
 import com.example.maxhodik.test.amazon.test.amazon.repository.SalesDateCustomRepository;
@@ -16,27 +18,36 @@ import java.util.List;
 public class DataServiceImpl implements DataService {
     private final SalesDataRepository dataRepository;
     private final SalesDateCustomRepository customRepository;
+    private final SalesAndTrafficByDateMapper mapper;
 
 
     @Override
     @Cacheable("findByDateBetween")
-    public List<SalesAndTrafficByDate> findByDateBetween(String startDate, String endDate) {
+    public List<SalesAndTrafficByDateDTO> findByDateBetween(String startDate, String endDate) {
         log.info("Finding by date between {} - {}", startDate, endDate);
-        return customRepository.findByDateBetweenInclusive(startDate, endDate);
+        customRepository.findByDateBetweenInclusive(startDate, endDate);
+        return getSalesAndTrafficByDateDTOS(customRepository.findByDateBetweenInclusive(startDate, endDate));
+
     }
 
     @Override
     @Cacheable("findByDate")
-    public List<SalesAndTrafficByDate> findByDate(String date) {
+    public List<SalesAndTrafficByDateDTO> findByDate(String date) {
         log.info("Finding by date {}", date);
-        return dataRepository.findByDate(date);
+        return getSalesAndTrafficByDateDTOS(dataRepository.findByDate(date));
     }
 
     @Override
     @Cacheable("findAllByDate")
-    public List<SalesAndTrafficByDate> findAllByDate() {
+    public List<SalesAndTrafficByDateDTO> findAllByDate() {
         log.info("Finding all by date ");
-        return dataRepository.findAll();
+        return getSalesAndTrafficByDateDTOS(dataRepository.findAll());
+    }
+
+    private List<SalesAndTrafficByDateDTO> getSalesAndTrafficByDateDTOS(List<SalesAndTrafficByDate> listByDate) {
+        return listByDate.stream()
+                .map(mapper::mapToSalesDTO)
+                .toList();
     }
 }
 

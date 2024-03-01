@@ -1,5 +1,7 @@
 package com.example.maxhodik.test.amazon.test.amazon.service;
 
+import com.example.maxhodik.test.amazon.test.amazon.dto.SalesAndTrafficByAsinDTO;
+import com.example.maxhodik.test.amazon.test.amazon.mapper.SalesAndTrafficByAsinMapper;
 import com.example.maxhodik.test.amazon.test.amazon.model.SalesAndTrafficByAsin;
 import com.example.maxhodik.test.amazon.test.amazon.repository.SalesAsinRepository;
 import lombok.Data;
@@ -16,18 +18,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AsinServiceImpl implements AsinService {
     private final SalesAsinRepository asinRepository;
+    private final SalesAndTrafficByAsinMapper mapper;
 
     @Override
     @Cacheable("findByAsins")
-    public List<SalesAndTrafficByAsin> findByAsins(List<String> asins) {
+    public List<SalesAndTrafficByAsinDTO> findByAsins(List<String> asins) {
         log.info("Finding by asins{}", asins);
-        return asinRepository.findByParentAsinIn(asins);
+        return getSalesAndTrafficByAsinDTOS(asinRepository.findByParentAsinIn(asins));
+
     }
 
     @Override
     @Cacheable("findAllByAsins")
-    public List<SalesAndTrafficByAsin> findAllByAsins() {
+    public List<SalesAndTrafficByAsinDTO> findAllByAsins() {
         log.info("finding all by asin");
-        return asinRepository.findAll();
+        return getSalesAndTrafficByAsinDTOS(asinRepository.findAll());
+    }
+
+    private List<SalesAndTrafficByAsinDTO> getSalesAndTrafficByAsinDTOS(List<SalesAndTrafficByAsin> asinRepository) {
+        return asinRepository
+                .stream()
+                .map(mapper::mapToSalesDTO)
+                .toList();
     }
 }
